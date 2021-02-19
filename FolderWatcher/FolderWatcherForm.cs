@@ -228,19 +228,6 @@ namespace FolderWatcher
                     Console.WriteLine("Got a Match!");
                 }
 
-
-
-
-                //if ( SplitExt[i] == ExtensionTxt.Text )
-                //{
-                //    SplitExt[i].Remove(i, 1);
-                //    Console.WriteLine("Got a Match!");
-                //}
-                //else
-                //{
-                //    item.SubItems[1].Text = "";
-                //    item.SubItems[1].Text += SplitExt[i];
-                //}
             }
 
 
