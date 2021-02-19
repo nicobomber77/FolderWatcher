@@ -30,6 +30,8 @@ namespace FolderWatcher
         private void InitializeComponent()
         {
             this.Background = new System.Windows.Forms.Panel();
+            this.FldPathBrowseBtn = new System.Windows.Forms.Button();
+            this.RemoveBtn = new System.Windows.Forms.Button();
             this.PathAddBtn = new System.Windows.Forms.Button();
             this.PathLbl = new System.Windows.Forms.Label();
             this.PathTxt = new System.Windows.Forms.TextBox();
@@ -52,6 +54,7 @@ namespace FolderWatcher
             this.StatusDisplayText = new System.Windows.Forms.ToolStripStatusLabel();
             this.UpPanel = new System.Windows.Forms.Panel();
             this.fileSystemWatcher = new System.IO.FileSystemWatcher();
+            this.RemoveExtBtn = new System.Windows.Forms.Button();
             this.Background.SuspendLayout();
             this.StatusDisplayBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
@@ -60,6 +63,9 @@ namespace FolderWatcher
             // Background
             // 
             this.Background.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(61)))), ((int)(((byte)(61)))));
+            this.Background.Controls.Add(this.RemoveExtBtn);
+            this.Background.Controls.Add(this.FldPathBrowseBtn);
+            this.Background.Controls.Add(this.RemoveBtn);
             this.Background.Controls.Add(this.PathAddBtn);
             this.Background.Controls.Add(this.PathLbl);
             this.Background.Controls.Add(this.PathTxt);
@@ -82,6 +88,36 @@ namespace FolderWatcher
             this.Background.Name = "Background";
             this.Background.Size = new System.Drawing.Size(770, 459);
             this.Background.TabIndex = 0;
+            // 
+            // FldPathBrowseBtn
+            // 
+            this.FldPathBrowseBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(91)))), ((int)(((byte)(79)))), ((int)(((byte)(255)))));
+            this.FldPathBrowseBtn.FlatAppearance.BorderSize = 0;
+            this.FldPathBrowseBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.FldPathBrowseBtn.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FldPathBrowseBtn.ForeColor = System.Drawing.Color.White;
+            this.FldPathBrowseBtn.Location = new System.Drawing.Point(484, 331);
+            this.FldPathBrowseBtn.Name = "FldPathBrowseBtn";
+            this.FldPathBrowseBtn.Size = new System.Drawing.Size(76, 23);
+            this.FldPathBrowseBtn.TabIndex = 18;
+            this.FldPathBrowseBtn.Text = "Browse";
+            this.FldPathBrowseBtn.UseVisualStyleBackColor = false;
+            this.FldPathBrowseBtn.Click += new System.EventHandler(this.FldPathBrowseBtn_Click);
+            // 
+            // RemoveBtn
+            // 
+            this.RemoveBtn.BackColor = System.Drawing.Color.DimGray;
+            this.RemoveBtn.FlatAppearance.BorderSize = 0;
+            this.RemoveBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.RemoveBtn.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RemoveBtn.ForeColor = System.Drawing.Color.White;
+            this.RemoveBtn.Location = new System.Drawing.Point(55, 360);
+            this.RemoveBtn.Name = "RemoveBtn";
+            this.RemoveBtn.Size = new System.Drawing.Size(75, 23);
+            this.RemoveBtn.TabIndex = 17;
+            this.RemoveBtn.Text = "Remove";
+            this.RemoveBtn.UseVisualStyleBackColor = false;
+            this.RemoveBtn.Click += new System.EventHandler(this.RemoveBtn_Click);
             // 
             // PathAddBtn
             // 
@@ -113,11 +149,12 @@ namespace FolderWatcher
             // 
             this.PathTxt.BackColor = System.Drawing.Color.DimGray;
             this.PathTxt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PathTxt.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PathTxt.ForeColor = System.Drawing.Color.White;
             this.PathTxt.Location = new System.Drawing.Point(389, 305);
             this.PathTxt.Name = "PathTxt";
-            this.PathTxt.Size = new System.Drawing.Size(274, 20);
+            this.PathTxt.Size = new System.Drawing.Size(274, 23);
             this.PathTxt.TabIndex = 14;
-            this.PathTxt.TextChanged += new System.EventHandler(this.PathTxt_TextChanged);
             // 
             // ExtensionAddBtn
             // 
@@ -164,9 +201,11 @@ namespace FolderWatcher
             // 
             this.ExtensionTxt.BackColor = System.Drawing.Color.DimGray;
             this.ExtensionTxt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ExtensionTxt.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ExtensionTxt.ForeColor = System.Drawing.Color.White;
             this.ExtensionTxt.Location = new System.Drawing.Point(219, 305);
             this.ExtensionTxt.Name = "ExtensionTxt";
-            this.ExtensionTxt.Size = new System.Drawing.Size(100, 20);
+            this.ExtensionTxt.Size = new System.Drawing.Size(100, 23);
             this.ExtensionTxt.TabIndex = 10;
             this.ExtensionTxt.TextChanged += new System.EventHandler(this.ExtensionTxt_TextChanged);
             // 
@@ -185,9 +224,11 @@ namespace FolderWatcher
             // 
             this.FileTypeTxt.BackColor = System.Drawing.Color.DimGray;
             this.FileTypeTxt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.FileTypeTxt.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FileTypeTxt.ForeColor = System.Drawing.Color.White;
             this.FileTypeTxt.Location = new System.Drawing.Point(55, 305);
             this.FileTypeTxt.Name = "FileTypeTxt";
-            this.FileTypeTxt.Size = new System.Drawing.Size(100, 20);
+            this.FileTypeTxt.Size = new System.Drawing.Size(100, 23);
             this.FileTypeTxt.TabIndex = 8;
             this.FileTypeTxt.TextChanged += new System.EventHandler(this.FileTypeTxt_TextChanged);
             // 
@@ -217,7 +258,7 @@ namespace FolderWatcher
             // Extensions
             // 
             this.Extensions.Text = "Extensions";
-            this.Extensions.Width = 82;
+            this.Extensions.Width = 150;
             // 
             // DestFolder
             // 
@@ -311,6 +352,7 @@ namespace FolderWatcher
             // 
             this.StatusDisplayText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(95)))), ((int)(((byte)(95)))));
             this.StatusDisplayText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusDisplayText.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.StatusDisplayText.Name = "StatusDisplayText";
             this.StatusDisplayText.Size = new System.Drawing.Size(134, 21);
             this.StatusDisplayText.Text = "Stuff Happened";
@@ -332,6 +374,21 @@ namespace FolderWatcher
             this.fileSystemWatcher.Created += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Created);
             this.fileSystemWatcher.Deleted += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Deleted);
             this.fileSystemWatcher.Renamed += new System.IO.RenamedEventHandler(this.fileSystemWatcher_Renamed);
+            // 
+            // RemoveExtBtn
+            // 
+            this.RemoveExtBtn.BackColor = System.Drawing.Color.DimGray;
+            this.RemoveExtBtn.FlatAppearance.BorderSize = 0;
+            this.RemoveExtBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.RemoveExtBtn.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RemoveExtBtn.ForeColor = System.Drawing.Color.White;
+            this.RemoveExtBtn.Location = new System.Drawing.Point(219, 360);
+            this.RemoveExtBtn.Name = "RemoveExtBtn";
+            this.RemoveExtBtn.Size = new System.Drawing.Size(75, 23);
+            this.RemoveExtBtn.TabIndex = 19;
+            this.RemoveExtBtn.Text = "Remove";
+            this.RemoveExtBtn.UseVisualStyleBackColor = false;
+            this.RemoveExtBtn.Click += new System.EventHandler(this.RemoveExtBtn_Click);
             // 
             // FolderWatcherForm
             // 
@@ -376,6 +433,9 @@ namespace FolderWatcher
         private System.Windows.Forms.TextBox ExtensionTxt;
         private System.Windows.Forms.Label FileTypeLbl;
         private System.Windows.Forms.TextBox FileTypeTxt;
+        private System.Windows.Forms.Button RemoveBtn;
+        private System.Windows.Forms.Button FldPathBrowseBtn;
+        private System.Windows.Forms.Button RemoveExtBtn;
     }
 }
 

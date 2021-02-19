@@ -25,6 +25,7 @@ namespace FolderWatcher
         private void FTWBrowseBtn_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
+            //OpenFileDialog opf = new OpenFileDialog() { Filter = "Folders"};
 
             if ( fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK )
                 WatchFolderTxtBox.Text = fbd.SelectedPath;
@@ -83,7 +84,7 @@ namespace FolderWatcher
 
 
 
-        private string[] ParseExt(string extensions)
+        private string[] ParseCSV(string extensions)
         {
 
             string[] SplitExt = extensions.Split(';');
@@ -108,7 +109,10 @@ namespace FolderWatcher
 
         private void FileTypeAddBtn_Click(object sender, EventArgs e)
         {
-            FileList.Items.Add(FileTypeTxt.Text);
+            ListViewItem item = new ListViewItem(FileTypeTxt.Text);
+            FileList.Items.Add(item);
+            item.SubItems.Add("");
+            item.SubItems.Add("");
             FileTypeTxt.Text = "";
         }
 
@@ -122,29 +126,123 @@ namespace FolderWatcher
         {
             Char[] TxtToChar = ExtensionTxt.Text.ToCharArray();
 
-            if (TxtToChar[0] != '.' ) StatusDisplayText.Text = "Insert a dot before the extension!";
-            
+            if ( TxtToChar[0] != '.' )
+            {
+                StatusDisplayText.Text = "Insert a dot before the extension!";
+               
+               ExtensionTxt.Text = " ";
+            }
+
             else StatusDisplayText.Text = "";
         }
 
         private void ExtensionAddBtn_Click(object sender, EventArgs e)
         {
-          // FileList.SelectedItems[0].SubItems[1].Text += ExtensionTxt.Text;
+            ListViewItem item;
+            if(FileList.SelectedItems.Count > 0) item = FileList.SelectedItems[0];
+            else
+            {
+                StatusDisplayText.Text = "Select something";
+                return;
+            }
 
-            StatusDisplayText.Text = FileList.SelectedItems[0].SubItems.Count.ToString();
+
+            if (item.SubItems[1].Text == "" )
+            {
+                item.SubItems[1].Text = ExtensionTxt.Text;
+
+            }
+            else
+            {
+                string subitem = item.SubItems[1].Text + " | " + ExtensionTxt.Text;
+                item.SubItems[1].Text = subitem;
+            }
+           
+
         }
 
 
 
 
 
-        private void PathTxt_TextChanged(object sender, EventArgs e)
+       
+
+        private void RemoveBtn_Click(object sender, EventArgs e)
         {
-
+            FileList.SelectedItems[0].Remove();
         }
+
+        private void FldPathBrowseBtn_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            //OpenFileDialog opf = new OpenFileDialog() { Filter = "Folders"};
+
+            if ( fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK )
+                PathTxt.Text = fbd.SelectedPath;
+        }
+
+
 
         private void PathAddBtn_Click(object sender, EventArgs e)
         {
+            ListViewItem item;
+            if ( FileList.SelectedItems.Count > 0 ) item = FileList.SelectedItems[0];
+            else 
+            { 
+                StatusDisplayText.Text = "Select something";
+                return;
+            }
+
+            if ( Directory.Exists(PathTxt.Text) )
+            {
+                item.SubItems[1].Text = PathTxt.Text;
+                PathTxt.Clear();
+            }
+            else
+            {
+                StatusDisplayText.Text = "Invalid Path";
+            }
+               
+        }
+
+        private void RemoveExtBtn_Click(object sender, EventArgs e)
+        {
+            ListViewItem item;
+            if ( FileList.SelectedItems.Count > 0 ) item = FileList.SelectedItems[0];
+            else
+            {
+                StatusDisplayText.Text = "Select something";
+                return;
+            }
+
+
+            string[] SplitExt = item.SubItems[1].Text.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries);
+
+            for ( int i = 0; i < SplitExt.Length; i++ )
+            {
+                item.SubItems[1].Text = "";
+                if ( SplitExt[i] != ExtensionTxt.Text )
+                {
+                    item.SubItems[1].Text = "";
+                    item.SubItems[1].Text += SplitExt[i];
+                    Console.WriteLine("Got a Match!");
+                }
+
+
+
+
+                //if ( SplitExt[i] == ExtensionTxt.Text )
+                //{
+                //    SplitExt[i].Remove(i, 1);
+                //    Console.WriteLine("Got a Match!");
+                //}
+                //else
+                //{
+                //    item.SubItems[1].Text = "";
+                //    item.SubItems[1].Text += SplitExt[i];
+                //}
+            }
+
 
         }
     }
