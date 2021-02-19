@@ -18,7 +18,9 @@ namespace FolderWatcher
             InitializeComponent();
         }
 
-     
+        public const string EXTENSIONS = "Extensions";
+        public const string FILETYPE = "FileType";
+        public const string FILEDIR = "FileDest";
 
         private void FTWBrowseBtn_Click(object sender, EventArgs e)
         {
@@ -34,6 +36,8 @@ namespace FolderWatcher
             fileSystemWatcher.EnableRaisingEvents = true;
 
             
+            
+
         }
 
         private void StopBtn_Click(object sender, EventArgs e)
@@ -54,7 +58,7 @@ namespace FolderWatcher
             StatusDisplayText.Text = $"File: {e.Name} was created.";
 
             var info = new FileInfo(e.FullPath);
-            if(info.)
+            //if(info.)
         }
 
         private void fileSystemWatcher_Deleted(object sender, System.IO.FileSystemEventArgs e)
@@ -91,6 +95,57 @@ namespace FolderWatcher
             }
 
             return SplitExt;
+        }
+
+
+
+
+
+        private void FileTypeTxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FileTypeAddBtn_Click(object sender, EventArgs e)
+        {
+            FileList.Items.Add(FileTypeTxt.Text);
+            FileTypeTxt.Text = "";
+        }
+
+
+
+
+
+
+
+        private void ExtensionTxt_TextChanged(object sender, EventArgs e)
+        {
+            Char[] TxtToChar = ExtensionTxt.Text.ToCharArray();
+
+            if (TxtToChar[0] != '.' ) StatusDisplayText.Text = "Insert a dot before the extension!";
+            
+            else StatusDisplayText.Text = "";
+        }
+
+        private void ExtensionAddBtn_Click(object sender, EventArgs e)
+        {
+          // FileList.SelectedItems[0].SubItems[1].Text += ExtensionTxt.Text;
+
+            StatusDisplayText.Text = FileList.SelectedItems[0].SubItems.Count.ToString();
+        }
+
+
+
+
+
+        private void PathTxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PathAddBtn_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
