@@ -55,8 +55,10 @@ namespace FolderWatcher
             this.UpPanel = new System.Windows.Forms.Panel();
             this.fileSystemWatcher = new System.IO.FileSystemWatcher();
             this.RemoveExtBtn = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.Background.SuspendLayout();
             this.StatusDisplayBar.SuspendLayout();
+            this.UpPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
             this.SuspendLayout();
             // 
@@ -360,6 +362,7 @@ namespace FolderWatcher
             // UpPanel
             // 
             this.UpPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(99)))), ((int)(((byte)(99)))));
+            this.UpPanel.Controls.Add(this.label1);
             this.UpPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.UpPanel.Location = new System.Drawing.Point(0, 0);
             this.UpPanel.Name = "UpPanel";
@@ -390,6 +393,17 @@ namespace FolderWatcher
             this.RemoveExtBtn.UseVisualStyleBackColor = false;
             this.RemoveExtBtn.Click += new System.EventHandler(this.RemoveExtBtn_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 37F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(112)))), ((int)(((byte)(254)))));
+            this.label1.Location = new System.Drawing.Point(23, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(391, 59);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Folder Watcher";
+            // 
             // FolderWatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -403,6 +417,8 @@ namespace FolderWatcher
             this.Background.PerformLayout();
             this.StatusDisplayBar.ResumeLayout(false);
             this.StatusDisplayBar.PerformLayout();
+            this.UpPanel.ResumeLayout(false);
+            this.UpPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).EndInit();
             this.ResumeLayout(false);
 
@@ -436,6 +452,7 @@ namespace FolderWatcher
         private System.Windows.Forms.Button RemoveBtn;
         private System.Windows.Forms.Button FldPathBrowseBtn;
         private System.Windows.Forms.Button RemoveExtBtn;
+        private System.Windows.Forms.Label label1;
     }
 }
 

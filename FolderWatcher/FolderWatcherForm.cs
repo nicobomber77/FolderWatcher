@@ -18,20 +18,16 @@ namespace FolderWatcher
             InitializeComponent();
         }
 
-        public const string EXTENSIONS = "Extensions";
-        public const string FILETYPE = "FileType";
-        public const string FILEDIR = "FileDest";
 
-        private void FTWBrowseBtn_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            //OpenFileDialog opf = new OpenFileDialog() { Filter = "Folders"};
 
-            if ( fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK )
-                WatchFolderTxtBox.Text = fbd.SelectedPath;
-            
-        }
+        #region variables
+      
+        List<string> extensions;
 
+        #endregion
+
+
+        #region start and stop
         private void StartBtn_Click(object sender, EventArgs e)
         {
             fileSystemWatcher.EnableRaisingEvents = true;
@@ -45,6 +41,34 @@ namespace FolderWatcher
         {
             fileSystemWatcher.EnableRaisingEvents = false;
         }
+
+        #endregion
+
+
+        #region folder to watch stuff
+        private void FTWBrowseBtn_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            //OpenFileDialog opf = new OpenFileDialog() { Filter = "Folders"};
+
+            if ( fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK )
+                WatchFolderTxtBox.Text = fbd.SelectedPath;
+
+        }
+
+        private void FTWTxt_Changed(object sender, EventArgs e)
+        {
+            if ( Directory.Exists(WatchFolderTxtBox.Text) )
+            {
+                fileSystemWatcher.Path = WatchFolderTxtBox.Text;
+            }
+            else
+            {
+                StatusDisplayText.Text = "Watch path is invalid!";
+            }
+        }
+
+        #endregion
 
 
         #region FileSystemWatcher
@@ -75,33 +99,8 @@ namespace FolderWatcher
 
         #endregion
 
-        private void FTWTxt_Changed(object sender, EventArgs e)
-        {
-            fileSystemWatcher.Path = WatchFolderTxtBox.Text;
-        }
 
-
-
-
-
-        private string[] ParseCSV(string extensions)
-        {
-
-            string[] SplitExt = extensions.Split(';');
-
-            for ( int i = 0; i < SplitExt.Length; i++ )
-            {
-
-                SplitExt[i] = SplitExt[i].Replace(" ", "");
-            }
-
-            return SplitExt;
-        }
-
-
-
-
-
+        #region file type stuff
         private void FileTypeTxt_TextChanged(object sender, EventArgs e)
         {
 
@@ -116,12 +115,15 @@ namespace FolderWatcher
             FileTypeTxt.Text = "";
         }
 
+        private void RemoveBtn_Click(object sender, EventArgs e)
+        {
+            FileList.SelectedItems[0].Remove();
+        }
+
+        #endregion
 
 
-
-
-
-
+        #region extension stuff
         private void ExtensionTxt_TextChanged(object sender, EventArgs e)
         {
             Char[] TxtToChar = ExtensionTxt.Text.ToCharArray();
@@ -130,7 +132,8 @@ namespace FolderWatcher
             {
                 StatusDisplayText.Text = "Insert a dot before the extension!";
                
-               ExtensionTxt.Text = " ";
+               ExtensionTxt.Text = ".";
+                ExtensionTxt.Focus();
             }
 
             else StatusDisplayText.Text = "";
@@ -146,32 +149,66 @@ namespace FolderWatcher
                 return;
             }
 
-
-            if (item.SubItems[1].Text == "" )
+            if ( ExtExists(ExtensionTxt.Text) )
             {
-                item.SubItems[1].Text = ExtensionTxt.Text;
+
+                if (item.SubItems[1].Text == "" )
+                {
+                
+                    item.SubItems[1].Text = ExtensionTxt.Text;
+                    extensions.Add(ExtensionTxt.Text);
+                }
+                else
+                {
+                    string subitem = item.SubItems[1].Text + " | " + ExtensionTxt.Text;
+                    item.SubItems[1].Text = subitem;
+                    extensions.Add(ExtensionTxt.Text);
+                }
 
             }
             else
             {
-                string subitem = item.SubItems[1].Text + " | " + ExtensionTxt.Text;
-                item.SubItems[1].Text = subitem;
+                StatusDisplayText.Text = "Extension alerady exists!";
             }
-           
 
         }
 
-
-
-
-
-       
-
-        private void RemoveBtn_Click(object sender, EventArgs e)
+        private void RemoveExtBtn_Click(object sender, EventArgs e)
         {
-            FileList.SelectedItems[0].Remove();
+            ListViewItem item;
+            if ( FileList.SelectedItems.Count > 0 ) item = FileList.SelectedItems[0];
+            else
+            {
+                StatusDisplayText.Text = "Select something";
+                return;
+            }
+
+
+            string[] SplitExt = item.SubItems[1].Text.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries);
+
+            for ( int i = 0; i < SplitExt.Length; i++ )
+            {
+                item.SubItems[1].Text = "";
+                if ( SplitExt[i] != ExtensionTxt.Text )
+                {
+                    item.SubItems[1].Text = "";
+                    item.SubItems[1].Text += SplitExt[i];
+
+                }
+                else
+                {
+                    Console.WriteLine($"Got a Match! \t Removing...");
+                }
+
+            }
+
+
         }
 
+        #endregion
+
+
+        #region folder path stuff
         private void FldPathBrowseBtn_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
@@ -180,8 +217,6 @@ namespace FolderWatcher
             if ( fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK )
                 PathTxt.Text = fbd.SelectedPath;
         }
-
-
 
         private void PathAddBtn_Click(object sender, EventArgs e)
         {
@@ -205,32 +240,40 @@ namespace FolderWatcher
                
         }
 
-        private void RemoveExtBtn_Click(object sender, EventArgs e)
+        #endregion
+
+
+        #region other methods
+        bool ExtExists(string extToCheckFor)
         {
-            ListViewItem item;
-            if ( FileList.SelectedItems.Count > 0 ) item = FileList.SelectedItems[0];
-            else
+            bool exists = false;
+
+            for ( int i = 0; i < extensions.Count; i++ )
             {
-                StatusDisplayText.Text = "Select something";
-                return;
+                if(extToCheckFor == extensions[i] )
+                {
+                   exists = true;
+                }
             }
 
+            return exists;
 
-            string[] SplitExt = item.SubItems[1].Text.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private string[] ParseCSV(string extensions)
+        {
+
+            string[] SplitExt = extensions.Split(';');
 
             for ( int i = 0; i < SplitExt.Length; i++ )
             {
-                item.SubItems[1].Text = "";
-                if ( SplitExt[i] != ExtensionTxt.Text )
-                {
-                    item.SubItems[1].Text = "";
-                    item.SubItems[1].Text += SplitExt[i];
-                    Console.WriteLine("Got a Match!");
-                }
 
+                SplitExt[i] = SplitExt[i].Replace(" ", "");
             }
 
-
+            return SplitExt;
         }
+
+        #endregion
     }
 }
